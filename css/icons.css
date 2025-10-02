@@ -1,0 +1,104 @@
+/* CSS Icons for Kaiyun Sports Theme */
+
+/* Logo Icon */
+.logo-icon::before {
+    content: "K";
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Utility Icons */
+.utility-menu .menu-item:nth-child(1) a::before {
+    content: "🎧";
+    margin-right: 5px;
+}
+
+.utility-menu .menu-item:nth-child(2) a::before {
+    content: "🤝";
+    margin-right: 5px;
+}
+
+.utility-menu .menu-item:nth-child(3) a::before {
+    content: "🏆";
+    margin-right: 5px;
+}
+
+.utility-menu .menu-item:nth-child(4) a::before {
+    content: "🎁";
+    margin-right: 5px;
+}
+
+.utility-menu .menu-item:nth-child(5) a::before {
+    content: "📱";
+    margin-right: 5px;
+}
+
+/* Action Button Icons */
+.deposit-btn::before {
+    content: "💰";
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.transfer-btn::before {
+    content: "🔄";
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.withdraw-btn::before {
+    content: "💸";
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+/* Hide the img tags when using CSS icons */
+.action-btn img {
+    display: none;
+}
+
+/* VIP Badge */
+.user-level::before {
+    content: "👑";
+    margin-right: 3px;
+}
+
+/* Search Icon */
+.search-btn::before {
+    content: "🔍";
+}
+
+/* Password Visibility Toggle */
+.password-toggle::before {
+    content: "👁️";
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-btn {
+        min-width: 50px;
+        padding: 6px 8px;
+    }
+    
+    .action-btn span {
+        font-size: 10px;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        text-align: center;
+        padding: 5px 10px;
+    }
+    
+    .search-box {
+        min-width: 150px;
+    }
+}
+
