@@ -1,0 +1,34 @@
+/* User Profile Page */
+body.profile-body{background:#eef5ff;color:#223}
+.profile-wrap{padding:30px 0}
+.profile-container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:20px}
+.profile-sidebar{background:#fff;border:1px solid #e3e9f3;border-radius:12px;padding:18px}
+.profile-usercard{text-align:center;margin-bottom:16px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid #dbe7ff}
+.profile-username{font-weight:700;margin-top:10px}
+.profile-useremail{font-size:12px;color:#6b7a90}
+.profile-menu{list-style:none;margin:10px 0 0;padding:0}
+.profile-menu li{padding:10px 12px;border-radius:8px;cursor:pointer;color:#334;display:flex;align-items:center;justify-content:space-between}
+.profile-menu li:hover{background:#f3f7ff}
+.profile-menu li.active{background:#2ea3ff;color:#fff}
+
+.profile-main{display:flex;flex-direction:column;gap:16px}
+.card{background:#fff;border:1px solid #e3e9f3;border-radius:12px;padding:18px}
+.card-title{margin:0 0 14px 0;font-size:18px}
+.basic-form .form-row{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.basic-form label{width:90px;color:#6b7a90}
+.basic-form input[type="text"],.basic-form input[type="email"],.basic-form input[type="date"]{flex:1;height:40px;border:1px solid #d7e2f0;border-radius:8px;padding:0 12px}
+.radio-group{display:flex;gap:18px}
+.form-actions{margin-top:8px}
+.btn-primary{height:40px;padding:0 18px;border:none;border-radius:10px;background:#2ea3ff;color:#fff;font-weight:700;cursor:pointer}
+.btn-primary:active{transform:translateY(1px)}
+
+.security-list{list-style:none;margin:0;padding:0}
+.security-list li{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eef2f8;padding:10px 0}
+.btn-line{color:#2ea3ff;text-decoration:none}
+
+@media (max-width: 900px){
+  .profile-container{grid-template-columns:1fr}
+}
+
+

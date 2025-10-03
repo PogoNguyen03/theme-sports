@@ -1,0 +1,106 @@
+/* Auth pages (login/register) */
+:root{
+    --ky-primary:#2ea3ff;
+    --ky-primary-2:#248ee0;
+    --ky-bg: #0a1f3e;
+    --ky-card: rgba(10, 31, 62, .65);
+    --ky-border: rgba(255,255,255,.15);
+    --ky-text:#eaf6ff;
+    --ky-muted:#9fb6cf;
+}
+
+html,body{
+    height:100%;
+}
+
+body.auth-body{
+    margin:0;
+    background:#071a35 url('/wp-content/uploads/2025/10/background.webp') no-repeat 50%/cover fixed;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ky-text);
+}
+
+.auth-wrap{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+    backdrop-filter:saturate(120%);
+}
+
+.auth-card{
+    width:100%;
+    max-width:460px;
+    background:var(--ky-card);
+    border:1px solid var(--ky-border);
+    border-radius:18px;
+    box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+    overflow:hidden;
+}
+
+.auth-header{
+    padding:28px 28px 10px;
+    text-align:center;
+}
+.auth-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:700;
+}
+.auth-brand img{margin: 0 auto;width: 100%;}
+.auth-sub{opacity:.75;font-size:12px;margin-top:6px}
+
+.auth-body-inner{
+    padding:18px 28px 28px;
+}
+
+.auth-input{
+    position:relative;
+    margin-bottom:14px;
+}
+.auth-input input{
+    width:100%;
+    height:48px;
+    padding:0 14px 0 44px;
+    border-radius:12px;
+    border:1px solid var(--ky-border);
+    background:rgba(6,18,40,.6);
+    color:var(--ky-text);
+    outline:none;
+}
+.auth-input input::placeholder{color:var(--ky-muted)}
+
+.auth-ico{position:absolute;left:12px;top:50%;width:22px;height:22px;transform:translateY(-50%);opacity:.92;background-size:100% 100%;background-repeat:no-repeat}
+.ico-user{background-image:url('/wp-content/uploads/2025/10/user.png')}
+.ico-pass{background-image:url('/wp-content/uploads/2025/10/res.png')}
+
+.auth-actions{
+    display:flex;align-items:center;justify-content:space-between;margin:8px 0 16px;font-size:12px;color:var(--ky-muted)
+}
+.auth-remember{display:flex;align-items:center;gap:8px}
+
+.auth-btn{
+    display:block;width:100%;height:48px;border:none;border-radius:12px;background:linear-gradient(180deg,var(--ky-primary),var(--ky-primary-2));color:#fff;font-weight:700;cursor:pointer
+}
+.auth-btn:active{transform:translateY(1px)}
+
+.auth-quick{
+    display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-top:1px solid var(--ky-border);gap:10px
+}
+.auth-quick a{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:10px;background:rgba(255,255,255,.06);color:#fff;text-decoration:none;font-size:13px}
+.auth-quick img{width:18px;height:18px}
+
+/* small badges row (clubs) */
+.club-row{display:flex;gap:10px;justify-content:center;margin:6px 0 8px}
+.club-row .club{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;border:1px solid var(--ky-border)}
+.club-row .club img{width:24px;height:24px}
+
+@media (max-width:480px){
+    .auth-card{max-width:92vw}
+}
+
+

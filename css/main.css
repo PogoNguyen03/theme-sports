@@ -893,15 +893,15 @@ body {
 }
 
 /* Games Main Content */
-.games-main-content {
+/* .games-main-content {
     display: grid !important;
-    grid-template-columns: 2fr 1fr !important;
+    grid-template-columns: 1fr !important;
     gap: 40px !important;
     background: #fff !important;
     border-radius: 15px !important;
     padding: 30px !important;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1) !important;
-}
+} */
 
 /* Games Left Section */
 .games-left-section {
@@ -930,11 +930,6 @@ body {
 }
 
 /* Sports Info Header */
-.sports-info-header {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
 
 .sports-title-image {
     display: flex;
@@ -1013,8 +1008,14 @@ body {
 
 .provider-icon {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 60px!important;
+    height: 60px!important;
+    margin: 0 4px!important;
+    background: url(/wp-content/uploads/2025/10/download-5.png) no-repeat 0 0 / cover !important;
+    border-radius: 12.7px!important;
+    box-shadow: 0 4px 8px 0 rgba(112, 146, 215, .14)!important;
+    position: relative!important;
+    background-image: url(/wp-content/uploads/2025/10/download-5.png)!important;
 }
 
 .provider-icon-img,
@@ -1271,7 +1272,8 @@ body {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
     overflow: hidden;
-    padding: 0 40rem;}
+    padding: 0 40rem;
+}
 .footer-partner-item { display: flex; align-items: center; justify-content: center; opacity: .85; transition: opacity .2s; }
 .footer-partner-item img { height: 3rem; width: auto; filter: grayscale(100%); opacity: .9; }
 .footer-partner-item:hover { opacity: 1; }

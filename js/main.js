@@ -2,38 +2,52 @@
 (function() {
     // Prevent jQuery from detecting native :has() support to avoid syntax errors
     if (typeof jQuery !== 'undefined') {
-        // Force jQuery to use its own :has() implementation instead of native CSS
-        if (jQuery.support) {
-            jQuery.support.cssHas = false;
+        console.log('Disabling jQuery :has() native detection');
+        
+        // Completely disable jQuery's :has() native detection
+        Object.defineProperty(jQuery.support || {}, 'cssHas', {
+            value: false,
+            writable: false
+        });
+        
+        // Override :has() selector completely
+        if (jQuery.expr && jQuery.expr.pseudos) {
+            jQuery.expr.pseudos.has = function(elem, i, match) {
+                try {
+                    if (match && match[3]) {
+                        var selector = match[3];
+                        return jQuery(elem).children(selector).length > 0 || jQuery(elem).find(selector).length > 0;
+                    }
+                    return false;
+                } catch (e) {
+                    console.log('jQuery :has() error caught:', e);
+                    return false;
+                }
+            };
         }
         
-        // For newer jQuery versions, override the detection
-        var originalReady = jQuery.ready;
-        jQuery.ready = function() {
-            // Disable native :has() detection
-            if (jQuery.expr && jQuery.expr.pseudos && jQuery.expr.pseudos.has) {
-                var originalHas = jQuery.expr.pseudos.has;
-                jQuery.expr.pseudos.has = function(elem, i, match) {
+        // Override Sizzle if available (older jQuery versions)
+        if (window.Sizzle && Sizzle.selectors) {
+            if (Sizzle.selectors.pseudos) {
+                Sizzle.selectors.pseudos.has = function(elem, i, match) {
                     try {
-                        // Use jQuery's own implementation, not native CSS
-                        var selector = match[3];
-                        return jQuery(elem).find(selector).length > 0;
+                        if (match && match[3]) {
+                            var selector = match[3];
+                            return Sizzle.matches(elem, selector);
+                        }
+                        return false;
                     } catch (e) {
                         return false;
                     }
                 };
             }
-            
-            // Call original ready function
-            if (originalReady) {
-                return originalReady.apply(this, arguments);
-            }
-        };
+        }
     }
 })();
 
 jQuery(document).ready(function($) {
     // Additional safety check for :has() selector
+    console.log('jQuery loaded successfully');
     try {
     // Hero Slider functionality
     function initHeroSlider() {
@@ -783,21 +797,136 @@ jQuery(document).ready(function($) {
     
     // Initialize progress circles
     initProgressCircles();
-});
 
-document.addEventListener("DOMContentLoaded", function() {
-    const tabs = document.querySelectorAll(".games-tab-item");
-    const contents = document.querySelectorAll(".games-main-content");
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => {
-            // Bỏ active tab cũ
-            tabs.forEach(t => t.classList.remove("active"));
-            contents.forEach(c => c.classList.remove("active"));
-
-            // Active tab mới
-            tab.classList.add("active");
-            contents[index].classList.add("active");
+    // Header mini-login: submit to WordPress login
+    (function initMiniLogin(){
+        var $wrap = $('.login-section');
+        if ($wrap.length === 0) return;
+        $(document).on('click', '.login-btn', function(e){
+            e.preventDefault();
+            var $btn = $(this);
+            var loginUrl = $btn.attr('data-login-url') || window.location.href;
+            var username = $('.username-input').val() || '';
+            var password = $('.password-input').val() || '';
+            if (!username || !password) {
+                alert('请输入账号和密码');
+                return;
+            }
+            // Create and submit a hidden form
+            var $form = $('<form>', { method: 'POST', action: loginUrl, style: 'display:none' });
+            $form.append($('<input>', { type: 'hidden', name: 'log', value: username }));
+            $form.append($('<input>', { type: 'hidden', name: 'pwd', value: password }));
+            $form.append($('<input>', { type: 'hidden', name: 'rememberme', value: 'forever' }));
+            $form.append($('<input>', { type: 'hidden', name: 'redirect_to', value: window.location.href }));
+            $form.append($('<input>', { type: 'hidden', name: 'ky_login', value: '1' }));
+            // inject nonce by fetching from login page if exists
+            try {
+                var nonceField = jQuery('input[name="ky_login_nonce"]').first();
+                if (nonceField.length) {
+                    $form.append($('<input>', { type: 'hidden', name: 'ky_login_nonce', value: nonceField.val() }));
+                }
+            } catch(e) {}
+            $('body').append($form);
+            $form.trigger('submit');
         });
+        // Enter key submits
+        $(document).on('keypress', '.username-input, .password-input', function(e){
+            if (e.which === 13) {
+                $('.login-btn').click();
+            }
+        });
+    })();
+
+    // User panel hover dropdown
+    (function initUserDropdown(){
+        var hideTimer;
+        $(document).on('mouseenter', '.user-panel', function(){
+            clearTimeout(hideTimer);
+            $(this).find('.user-dropdown').stop(true, true).fadeIn(120);
+        });
+        $(document).on('mouseleave', '.user-panel', function(){
+            var $dd = $(this).find('.user-dropdown');
+            hideTimer = setTimeout(function(){ $dd.stop(true, true).fadeOut(120); }, 120);
+        });
+    })();
+
+    // Header expand/collapse on menu hover with submenu
+    (function initHeaderExpand() {
+        var $headerTop = $('.header-top');
+        var expandClass = 'expanded';
+        var $megaHost = $('.mega-host');
+        //phần cần xóa khi debug xong
+        var isLocked = false;
+
+        // Enable lock via URL ?mega=lock or by adding body.mega-lock
+        try {
+            var params = new URLSearchParams(window.location.search);
+            if (params.get('mega') === 'lock') {
+                $('body').addClass('mega-lock');
+            }
+        } catch(e) {}
+        isLocked = $('body').hasClass('mega-lock');
+        //phần cần xóa khi debug xong
+        // Helper: does this li have a mega-menu (children)?
+        function hasSubmenu($li) {
+            return $li.find('> .mega-menu, > .sub-menu').length > 0;
+        }
+
+        // Hover handlers on main menu items
+        $(document).on('mouseenter', '.main-menu > li', function() {
+            var $li = $(this);
+            if (hasSubmenu($li)) {
+                $headerTop.addClass(expandClass);
+                // Build mega panel dynamically from hidden sub-menu data
+                var banner = $li.attr('data-banner') || '';
+                var $sub = $li.children('.sub-menu');
+                
+                var $panel = $('<div class="mega-menu"></div>');
+                if (banner) {
+                    $panel.append('<div class="mega-header"><img class="mega-banner" src="' + banner + '" alt="" /></div>');
+                }
+                var $list = $('<ul class="mega-list"></ul>');
+                $sub.children('.sub-menu-item').each(function() {
+                    var $item = $(this);
+                    var url = $item.attr('data-url') || '#';
+                    var logo = $item.attr('data-logo') || '';
+                    var bannerSwap = $item.attr('data-banner') || '';
+                    var name = $item.find('.sub-name').text();
+                    var slug = $item.attr('data-slug') || '';
+                    var subtext = $item.attr('data-subtext') || '';
+                    var logoEl = logo ? '<span class="mega-logo" style="background-image:url(' + logo + ');"></span>' : '<span class="mega-logo mega-logo--placeholder"></span>';
+                    var infoEl = '<div class="mega-info"><span class="mega-title">' + name + '</span><span class="mega-slug">' + slug + '</span>' + (subtext ? '<span class="mega-subtext">' + subtext + '</span>' : '') + '</div>';
+                    var bannerEl = bannerSwap ? '<img class="mega-thumb" src="' + bannerSwap + '" alt="" />' : '';
+                    var $liOut = $('<li class="mega-item"><a href="' + url + '">' + logoEl + infoEl + bannerEl + '</a></li>');
+                    $list.append($liOut);
+                });
+                $panel.append($list);
+                // Remove single preview; show all under each item
+                $megaHost.empty().append($panel);
+            }
+        });
+
+        // If mouse leaves the entire header area, collapse
+    $('.site-header').on('mouseleave', function() {
+        if ($('body').hasClass('mega-lock')) { return; }
+        $headerTop.removeClass(expandClass);
+        $megaHost.empty();
     });
+
+        // Also collapse if focus moves away (keyboard navigation)
+    $(document).on('focusin', function(e) {
+        if ($('body').hasClass('mega-lock')) { return; }
+        if (!$(e.target).closest('.site-header').length) {
+            $headerTop.removeClass(expandClass);
+            $megaHost.empty();
+        }
+    });
+
+    // If locked, auto-open first menu item for editing
+    if (isLocked) {
+        var $first = $('.main-menu > li').first();
+        if ($first.length) { $first.trigger('mouseenter'); }
+    }
+    })();
 });
+
